@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  postgres-payment:
+    image: postgres:16
+    container_name: postgres-payment
+    environment:
+      POSTGRES_DB: paymentdb
+      POSTGRES_USER: payment_user
+      POSTGRES_PASSWORD: payment_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_payment_data:/var/lib/postgresql/data
+
+#  rabbitmq:
+#    image: rabbitmq:3-management
+#    container_name: rabbitmq
+#    ports:
+#      - "5672:5672"     # AMQP
+#      - "15672:15672"   # Management UI
+#    environment:
+#      RABBITMQ_DEFAULT_USER: guest
+#      RABBITMQ_DEFAULT_PASS: guest
+
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-payment:5432/paymentdb
+      SPRING_DATASOURCE_USERNAME: payment_user
+      SPRING_DATASOURCE_PASSWORD: payment_pass
+      SPRING_RABBITMQ_HOST: rabbitmq
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-payment
+      #- rabbitmq
+
+#  notification-service:
+#    build: ./notification-service
+#    container_name: notification-service
+#    environment:
+#      SPRING_PROFILES_ACTIVE: docker
+#      SPRING_RABBITMQ_HOST: rabbitmq
+#    ports:
+#      - "8081:8081"
+#    depends_on:
+#      - rabbitmq
+
+volumes:
+  postgres_payment_data:
