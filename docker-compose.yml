@@ -50,16 +50,17 @@ services:
           condition: service_started
 
 
-#  notification-service:
-#    build: ./notification-service
-#    container_name: notification-service
-#    environment:
-#      SPRING_PROFILES_ACTIVE: docker
-#      SPRING_RABBITMQ_HOST: rabbitmq
-#    ports:
-#      - "8081:8081"
-#    depends_on:
-#      - rabbitmq
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_RABBITMQ_HOST: rabbitmq
+    ports:
+      - "8081:8081"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
 volumes:
   postgres_payment_data:

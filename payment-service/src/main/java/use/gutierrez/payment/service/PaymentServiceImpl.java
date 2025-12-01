@@ -1,6 +1,7 @@
 package use.gutierrez.payment.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import use.gutierrez.payment.config.RabbitConfig;
@@ -14,6 +15,7 @@ import java.time.Instant;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
   private final PaymentRepository paymentRepository;
@@ -32,6 +34,8 @@ public class PaymentServiceImpl implements PaymentService {
     payment.setStatus(status);
     payment.setUpdatedAt(Instant.now());
     paymentRepository.save(payment);
+
+    log.info("sending event now...");
 
     if (isPaymentSuccess) {
       //fire an event to notify

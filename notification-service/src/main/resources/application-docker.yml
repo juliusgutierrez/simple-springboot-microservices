@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+spring:
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST}
+    port: 5672
+    username: guest
+    password: guest
+
+  application:
+    name: notification-service
