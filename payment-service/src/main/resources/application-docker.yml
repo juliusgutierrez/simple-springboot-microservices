@@ -13,3 +13,21 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST}
+    port: ${SPRING_RABBITMQ_PORT}
+    username: ${SPRING_RABBITMQ_USERNAME}
+    password: ${SPRING_RABBITMQ_PASSWORD}
+    connection-timeout: 10000
+
+    template:
+      retry:
+        enabled: true
+        max-attempts: 10
+        initial-interval: 3000
+
+  amqp:
+    cache:
+      channel:
+        size: 5

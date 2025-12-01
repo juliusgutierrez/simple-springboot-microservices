@@ -1,9 +1,12 @@
 package use.gutierrez.payment.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import use.gutierrez.payment.config.RabbitConfig;
 import use.gutierrez.payment.domain.Payment;
 import use.gutierrez.payment.domain.PaymentStatus;
+import use.gutierrez.payment.events.PaymentCompletedEvent;
 import use.gutierrez.payment.repository.PaymentRepository;
 
 import java.math.BigDecimal;
@@ -14,12 +17,12 @@ import java.time.Instant;
 public class PaymentServiceImpl implements PaymentService {
 
   private final PaymentRepository paymentRepository;
+  private final RabbitTemplate rabbitTemplate;
 
 
   @Override
   public Payment createPayment(String referenceId, String paymentMethod, BigDecimal amount, String currency) {
     Payment payment = toPayment(referenceId, paymentMethod, amount, currency);
-
     paymentRepository.save(payment);
 
     //fire a payment to third party api
@@ -32,6 +35,20 @@ public class PaymentServiceImpl implements PaymentService {
 
     if (isPaymentSuccess) {
       //fire an event to notify
+      PaymentCompletedEvent event = PaymentCompletedEvent
+          .builder()
+          .paymentId(payment.getId())
+          .externalReference(payment.getReferenceId())
+          .paymentMethod(payment.getPaymentMethod())
+          .amount(payment.getAmount())
+          .currency(payment.getCurrency())
+          .build();
+
+      rabbitTemplate.convertAndSend(
+          RabbitConfig.EXCHANGE_NAME,
+          RabbitConfig.ROUTING_KEY,
+          event
+      );
     }
 
     return payment;
