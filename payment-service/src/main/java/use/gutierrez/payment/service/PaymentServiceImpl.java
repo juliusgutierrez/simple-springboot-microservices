@@ -2,9 +2,7 @@ package use.gutierrez.payment.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
-import use.gutierrez.payment.config.RabbitConfig;
 import use.gutierrez.payment.domain.Payment;
 import use.gutierrez.payment.domain.PaymentStatus;
 import use.gutierrez.payment.events.PaymentCompletedEvent;
@@ -19,7 +17,7 @@ import java.time.Instant;
 public class PaymentServiceImpl implements PaymentService {
 
   private final PaymentRepository paymentRepository;
-  private final RabbitTemplate rabbitTemplate;
+  private final OutboxEventService outboxEventService;
 
 
   @Override
@@ -38,7 +36,8 @@ public class PaymentServiceImpl implements PaymentService {
     log.info("sending event now...");
 
     if (isPaymentSuccess) {
-      //fire an event to notify
+
+      // Save OUTBOX event inside SAME transaction
       PaymentCompletedEvent event = PaymentCompletedEvent
           .builder()
           .paymentId(payment.getId())
@@ -48,9 +47,9 @@ public class PaymentServiceImpl implements PaymentService {
           .currency(payment.getCurrency())
           .build();
 
-      rabbitTemplate.convertAndSend(
-          RabbitConfig.EXCHANGE_NAME,
-          RabbitConfig.ROUTING_KEY,
+      outboxEventService.saveEvent(
+          "PaymentCompleted",
+          payment.getId().toString(),
           event
       );
     }
