@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Copy parent pom and module pom to take advantage of Maven caching
 COPY pom.xml ./pom.xml
+COPY core-service/pom.xml core-service/pom.xml
 COPY payment-service/pom.xml payment-service/pom.xml
 COPY notification-service/pom.xml notification-service/pom.xml
 RUN mvn -q -B -pl payment-service -am dependency:go-offline

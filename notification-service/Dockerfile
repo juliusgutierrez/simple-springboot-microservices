@@ -3,6 +3,7 @@ WORKDIR /app
 
 # Copy parent and module POMs to leverage Maven cache layers
 COPY pom.xml ./pom.xml
+COPY core-service/pom.xml core-service/pom.xml
 COPY notification-service/pom.xml notification-service/pom.xml
 # Include sibling module pom so the aggregator build sees all declared modules
 COPY payment-service/pom.xml payment-service/pom.xml

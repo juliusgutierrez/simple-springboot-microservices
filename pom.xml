@@ -12,6 +12,7 @@
     <description>Payment Microservices</description>
 
     <modules>
+        <module>core-service</module>
         <module>payment-service</module>
         <module>notification-service</module>
     </modules>
