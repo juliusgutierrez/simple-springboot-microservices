@@ -49,7 +49,7 @@ services:
       rabbitmq:
         condition: service_healthy
       postgres-payment:
-          condition: service_started
+        condition: service_started
 
   notification-service:
     build:
@@ -65,7 +65,7 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  user-service:
+  core-service:
     build:
       context: .
       dockerfile: core-service/Dockerfile

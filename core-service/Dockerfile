@@ -3,8 +3,11 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
 #======2. COPY STAGE ======
+COPY pom.xml ./pom.xml
 COPY core-service/pom.xml core-service/pom.xml
-RUN mvn -q -B -f core-service/pom.xml dependency:go-offline
+COPY core-service/pom.xml core-service/pom.xml
+COPY payment-service/pom.xml payment-service/pom.xml
+COPY notification-service/pom.xml notification-service/pom.xml
 
 COPY core-service/src core-service/src
 RUN mvn -q -B -f core-service/pom.xml package -DskipTests
