@@ -23,7 +23,7 @@ public class OutboxCron {
   private final OutboxEventRepository repository;
   private final ObjectMapper objectMapper;
 
-  @Scheduled(fixedDelay = 3000)  // run every 5 seconds
+  @Scheduled(fixedDelay = 5000)  // run every 5 seconds
   public void processOutbox() {
 
     log.info("outbox cron start");
