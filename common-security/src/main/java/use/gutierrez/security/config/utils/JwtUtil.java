@@ -1,4 +1,4 @@
-package use.gutierrez.utils;
+package use.gutierrez.security.config.utils;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -6,7 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import java.time.Duration;
 import java.util.Date;
 
-public class JwtUtils {
+public class JwtUtil {
 
   private static final String SECRET = "supersecretkeysupersecretkey12345";
   private static final Duration EXPIRATION = Duration.ofHours(1);

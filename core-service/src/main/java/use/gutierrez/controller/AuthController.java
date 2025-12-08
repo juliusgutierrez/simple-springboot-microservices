@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import use.gutierrez.dto.LoginRequest;
-import use.gutierrez.utils.JwtUtils;
+import use.gutierrez.security.config.utils.JwtUtil;
 
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     String role = "ADMIN";
-    String token = JwtUtils.generateToken(loginRequest.username(), role);
+    String token = JwtUtil.generateToken(loginRequest.username(), role);
 
     return ResponseEntity.ok().body(
         Map.of(

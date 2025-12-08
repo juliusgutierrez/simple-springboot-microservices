@@ -1,4 +1,4 @@
-package use.gutierrez.config;
+package use.gutierrez.security.config;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -11,14 +11,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import use.gutierrez.utils.JwtUtils;
+import use.gutierrez.security.config.utils.JwtUtil;
 
 import java.io.IOException;
 
 @Configuration
 public class JwtAuthFilter extends OncePerRequestFilter {
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
     String authHeader = request.getHeader("Authorization");
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
       filterChain.doFilter(request, response);
@@ -29,7 +29,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     try {
       var claims = Jwts.parser()
-          .verifyWith(Keys.hmacShaKeyFor(JwtUtils.getSecret().getBytes()))
+          .verifyWith(Keys.hmacShaKeyFor(JwtUtil.getSecret().getBytes()))
           .build()
           .parseSignedClaims(token)
           .getPayload();

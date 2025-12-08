@@ -22,6 +22,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- Postgres + JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -63,6 +69,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>use.gutierrez</groupId>
+            <artifactId>common-security</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>
