@@ -7,10 +7,13 @@ COPY pom.xml ./pom.xml
 COPY core-service/pom.xml core-service/pom.xml
 COPY payment-service/pom.xml payment-service/pom.xml
 COPY notification-service/pom.xml notification-service/pom.xml
+COPY common-security/pom.xml common-security/pom.xml
+
 RUN mvn -q -B -pl payment-service -am dependency:go-offline
 
 # Copy source code
 COPY payment-service/src payment-service/src
+COPY common-security/src common-security/src
 
 # Build the Spring Boot JAR
 RUN mvn -q -B -pl payment-service -am package -DskipTests

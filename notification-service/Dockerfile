@@ -3,7 +3,11 @@ WORKDIR /app
 
 # Copy parent and module POMs to leverage Maven cache layers
 COPY pom.xml ./pom.xml
+COPY core-service/pom.xml core-service/pom.xml
+COPY payment-service/pom.xml payment-service/pom.xml
 COPY notification-service/pom.xml notification-service/pom.xml
+COPY common-security/pom.xml common-security/pom.xml
+
 RUN mvn -q -B -pl notification-service -am dependency:go-offline
 
 # Copy source code

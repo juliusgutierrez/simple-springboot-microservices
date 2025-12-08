@@ -5,9 +5,16 @@ WORKDIR /app
 #======2. COPY STAGE ======
 COPY pom.xml ./pom.xml
 COPY core-service/pom.xml core-service/pom.xml
+COPY payment-service/pom.xml payment-service/pom.xml
+COPY notification-service/pom.xml notification-service/pom.xml
+COPY common-security/pom.xml common-security/pom.xml
+
+RUN mvn -q -B -pl core-service -am dependency:go-offline
 
 COPY core-service/src core-service/src
-RUN mvn -q -B -f core-service/pom.xml package -DskipTests
+COPY common-security/src common-security/src
+
+RUN mvn -q -B -pl core-service -am package -DskipTests
 
 
 #======3. RUNTIME STAGE ======
