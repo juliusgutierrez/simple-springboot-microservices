@@ -5,7 +5,6 @@ WORKDIR /app
 #======2. COPY STAGE ======
 COPY pom.xml ./pom.xml
 COPY core-service/pom.xml core-service/pom.xml
-COPY core-service/pom.xml core-service/pom.xml
 COPY payment-service/pom.xml payment-service/pom.xml
 COPY notification-service/pom.xml notification-service/pom.xml
 
